@@ -33,18 +33,6 @@ const pAequorFactory = (number, array) => {
     compareDNA(obj) {
       const dnaToCompare = obj;
     },
-    // get name() {
-    //   return this._name;
-    // },
-    // get breed() {
-    //   return this._breed;
-    // },
-    // set name(name) {
-    //   this._name = name;
-    // }
-    // set weight(weight) {
-    //   this._weight = weight;
-    // },
   };
 };
 
