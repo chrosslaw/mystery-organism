@@ -13,40 +13,44 @@ const mockUpStrand = () => {
   return newStrand;
 };
 
+// Returns a DNA sample object. Requires a sample id number, and the mockUpStrand() function as arguments.
 const pAequorFactory = (number, array) => {
   return {
     _specimenNum: number,
     _array: array,
+    //Object function mutates one random DNA strand to one of the other three strands.
     mutate() {
       let newDna = [];
       let baseArray = ["A", "T", "C", "G"];
       let randomDnaBaseIndex = Math.floor(Math.random() * this._array.length);
-      let mutated = this._arr[randomDnaBaseIndex];
+      let mutated = this._array[randomDnaBaseIndex];
       baseArray.splice(baseArray.indexOf[mutated], 1);
-      this._arr.splice(
+      this._array.splice(
         randomDnaBaseIndex,
         1,
         baseArray[Math.floor(Math.random() * 3)]
       );
       return this._array;
     },
+    //Object function to compare two DNA samples and displays the percentage of matching strands
     compareDNA(obj) {
       let comparedArray = [];
       const dnaToCompare = obj;
       for (i = 0; i < this._array.length; i++) {
         if (this._array[i] === dnaToCompare._array[i]) {
-          comparedArray.push(this._arr[i]);
+          comparedArray.push(this._array[i]);
         }
       }
-      console.log(comparedArray);
+      console.log(`Matching DNA strands: ${comparedArray}`);
       console.log(
         `specimen #${this._specimenNum} and specimen #${
-          comparedArray._specimenNum
+          dnaToCompare._specimenNum
         } have ${
           (comparedArray.length / this._array.length) * 100
         }% DNA in common`
       );
     },
+    //Object function checks for 60% or more Cs and G's. Returns true or false.
     willLikelySurvive() {
       let count = 0;
       for (let i of this._array) {
@@ -54,13 +58,31 @@ const pAequorFactory = (number, array) => {
           count += 1;
         }
       }
-      return (count / this._array.length) * 100 >= 60 ? true : false;
+      let result = (count / this._array.length) * 100 >= 60 ? true : false;
+      return result;
     },
   };
 };
+//function takes a number as an argument, then creates an array of that many specimen objects.
+const requestSamples = (num) => {
+  sampleArray = [];
+  let count = 0;
+  while (count < num) {
+    sampleArray.push(pAequorFactory(count, mockUpStrand()));
+    count += 1;
+  }
+  return sampleArray;
+};
 
-const specimen1 = pAequorFactory(1, mockUpStrand());
-const specimen2 = pAequorFactory(2, mockUpStrand());
-console.log(specimen1.willLikelySurvive());
-// console.log(specimen2);
-// console.log(specimen1.compareDNA(specimen2));
+const thirtySamples = requestSamples(30);
+//console.log(thirtySamples);
+
+//Test cases
+thirtySamples[1].compareDNA(thirtySamples[2]);
+console.log(
+  `This sample is likely to survive: ${thirtySamples[1].willLikelySurvive()}`
+);
+
+console.log(`Before Mutation: ${thirtySamples[1]._array}`); //before mutation
+thirtySamples[1].mutate();
+console.log(` After Mutation: ${thirtySamples[1]._array}`); //after mutation
